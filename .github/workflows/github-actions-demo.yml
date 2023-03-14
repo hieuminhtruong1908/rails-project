@@ -41,6 +41,9 @@ jobs:
           yarn install --pure-lockfile
 
       - name: RuboCop Linter
+        permissions:
+          contents: read
+          packages: read
         uses: andrewmcodes/rubocop-linter-action@v3.3.0
         with:
           action_config_path: ".github/workflows/rubocop_linter_action.yml"
