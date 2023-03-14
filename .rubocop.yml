@@ -1,1 +1,11 @@
 require: rubocop-rails
+Style/FrozenStringLiteralComment:
+  Enabled: false
+AllCops:
+    SuggestExtensions: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/PercentLiteralDelimiters:
+  Enabled: false
+Style/Documentation:
+  Enabled: false	
