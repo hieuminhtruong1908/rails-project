@@ -48,4 +48,4 @@ jobs:
         with:
           action_config_path: ".github/workflows/rubocop_linter_action.yml"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
