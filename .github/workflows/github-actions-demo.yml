@@ -39,3 +39,7 @@ jobs:
       - name: Install packages
         run: |
           yarn install --pure-lockfile
+
+      - name: Run linters
+        run: |
+          rubocop --parallel app db config
