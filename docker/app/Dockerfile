@@ -6,6 +6,8 @@ WORKDIR /app
 
 COPY Gemfile* ./
 
+COPY Gemfile.lock* ./
+
 COPY package.json ./
 
 COPY yarn.lock ./
