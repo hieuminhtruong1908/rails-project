@@ -55,7 +55,7 @@ set :branch, "staging"
 #
 # The server-based syntax can be used to override options:
 # ------------------------------------
-server "35.77.188.23",
+server "54.95.23.149",
   user: "deploy",
   roles: %w{web app db},
   ssh_options: {
