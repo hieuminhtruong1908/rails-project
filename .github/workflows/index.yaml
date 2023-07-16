@@ -26,14 +26,14 @@ jobs:
       - name: Build and push rails app
         uses: docker/build-push-action@v4
         with:
-          context: ./docker/app
+          context: .
           file: ./docker/app/Dockerfile
           push: true
           tags: 19081998125/rails-app:v1
       - name: Build and push NGINX 
         uses: docker/build-push-action@v4
         with:
-          context: ./docker/nginx
+          context: .
           file: ./docker/nginx/Dockerfile
           push: true
           tags: 19081998125/nginx:v1
