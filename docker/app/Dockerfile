@@ -1,32 +1,19 @@
-# We're currently using Ruby 2.5.1
+#1 This is the official Ruby image (https://hub.docker.com/_/ruby) - a complete Linux system with Ruby installed
 FROM ruby:2.6.3
 
+#2 Install applications needed for building Rails app
+RUN apt-get update && apt-get install -y \
+ build-essential libpq-dev nodejs zlib1g-dev liblzma-dev
 
-# In a single step - install the dependences (apk is Alpine Linux's 
-# equivalent to apt) and then remove the cached files (to keep the image 
-# as small as we can)
-RUN apk add --update bash build-base nodejs mariadb-dev tzdata && \
-  rm -rf /var/cache/apk/*
-
-# Make a directory to hold our app and set the working directory to it
-RUN mkdir /app
+#3 The WORKDIR instruction sets the working directory for any RUN, CMD, ENTRYPOINT, COPY and ADD
+# If a directory doesn’t exist, it will be created
 WORKDIR /app
 
-# Do the gem installation stuff first, in a separate step, because they
-# Don't change as often as the code (so we can cache them in a separate 
-# Docker image layer)
-COPY Gemfile Gemfile.lock ./
-RUN bundle install --binstubs
+#4 Copy files from current location to image WORKDIR
+COPY . . 
 
-# Now copy the current folder to the WORKDIR and drop root privileges
-COPY . .
-RUN chown -R nobody:nogroup /app
+#5 Install gems in the image
+RUN bundle install
 
-# Compile all assets
-RUN bundle exec rake assets:precompile
-
-# Inform Docker what port our container listens on at runtime
-EXPOSE 3000
-
-# Set a default command to start the Rails server (can override this for workers, etc.)
-CMD ["bundle", "exec", "rails", "server", "-p", "3000"]
+#6 Command that will be executed when you run the image
+CMD bundle exec rails s -p 3000 -b '0.0.0.0'
