@@ -13,6 +13,7 @@ WORKDIR /app
 COPY . . 
 
 #5 Install gems in the image
+RUN gem install bundler:2.3.26
 RUN bundle install
 
 #6 Command that will be executed when you run the image
