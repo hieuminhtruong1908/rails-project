@@ -1,5 +1,5 @@
 # We're currently using Ruby 2.5.1
-FROM ruby:2.5.1-alpine
+FROM ruby:2.6.3
 
 
 # In a single step - install the dependences (apk is Alpine Linux's 
