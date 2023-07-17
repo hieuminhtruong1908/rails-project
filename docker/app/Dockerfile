@@ -1,42 +1,32 @@
-ARG RUBY_VERSION=2.6.3
+# We're currently using Ruby 2.5.1
+FROM ruby:2.5.1-alpine
 
-FROM ruby:${RUBY_VERSION}-slim-buster
 
+# In a single step - install the dependences (apk is Alpine Linux's 
+# equivalent to apt) and then remove the cached files (to keep the image 
+# as small as we can)
+RUN apk add --update bash build-base nodejs mariadb-dev tzdata && \
+  rm -rf /var/cache/apk/*
+
+# Make a directory to hold our app and set the working directory to it
+RUN mkdir /app
 WORKDIR /app
 
+# Do the gem installation stuff first, in a separate step, because they
+# Don't change as often as the code (so we can cache them in a separate 
+# Docker image layer)
+COPY Gemfile Gemfile.lock ./
+RUN bundle install --binstubs
+
+# Now copy the current folder to the WORKDIR and drop root privileges
 COPY . .
+RUN chown -R nobody:nogroup /app
 
-RUN apt-get update && \
-    apt-get install build-essential -y --no-install-recommends \
-    vim \
-    git \
-    gnupg2 \
-    curl \
-    wget \
-    nodejs \
-    patch \
-    ruby-dev \
-    zlib1g-dev \
-    liblzma-dev \
-    libmariadb-dev \
-    libsqlite3-dev
+# Compile all assets
+RUN bundle exec rake assets:precompile
 
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
-    apt-get update && apt-get install yarn --no-install-recommends -y
+# Inform Docker what port our container listens on at runtime
+EXPOSE 3000
 
-ENV BUNDLER_PATH=/bundle BUNDLE_BIN=/bundle/bin GEM_HOME=/bundle
-
-ENV PATH="${BUNDLE_BIN}:${PATH}"
-
-ARG BUNDLER_VERSION=2.3.26
-
-RUN gem install bundler:${BUNDLER_VERSION}
-
-RUN bundle install --path=${BUNDLER_PATH}
-
-RUN yarn install --check-files
-
-COPY docker/app/*.sh /scripts/
-
-RUN chmod a+x /scripts/*.sh
+# Set a default command to start the Rails server (can override this for workers, etc.)
+CMD ["bundle", "exec", "rails", "server", "-p", "3000"]
