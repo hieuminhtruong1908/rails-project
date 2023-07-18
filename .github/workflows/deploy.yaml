@@ -1,0 +1,44 @@
+name: deploy to ec2
+
+on:
+  pull_request:
+    branches:
+      - 'main'
+
+env:
+  APP_NAME: 'rails-project'
+
+jobs:
+#First we will see the application build or not , then we will deploy in EC2
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Build the docker_compose
+      run: docker-compose up -d --build
+
+  Deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2 
+      - name: Deploy in EC2
+        env:
+            PRIVATE_KEY: ${{ secrets.AWS_SECRET_KEY  }}
+            HOSTNAME : ${{ secrets.AWS_HOST  }}
+            USER_NAME : ${{ secrets.AWS_USER  }}
+            
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          
+            #Now we have got the access of EC2 and we will start the deploy .
+            cd /deploy/${{ env.APP_NAME }} &&
+            git checkout dev &&
+            git fetch --all &&
+            git reset --hard origin/master &&
+            git pull origin dev &&
+            docker-compose -f docker-compose.yml up -d --build 
