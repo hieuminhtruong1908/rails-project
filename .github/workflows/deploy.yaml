@@ -24,21 +24,33 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v2 
       - name: Deploy in EC2
+        uses: actions/checkout@v2 
+      
         env:
-            PRIVATE_KEY: ${{ secrets.AWS_SECRET_KEY  }}
+            AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY  }}
             HOSTNAME : ${{ secrets.AWS_HOST  }}
             USER_NAME : ${{ secrets.AWS_USER  }}
+      - name: create ssh folder
+        run: mkdir /home/runner/.ssh/
+
+      - name: create private key
+        run: touch /home/runner/.ssh/private_key.pem
+
+      - name: copy private key
+        run: 'echo "$AWS_SECRET_KEY" > /home/runner/.ssh/private_key.pem'
+
+      - name: change permission to private key
+        run: chmod 400 /home/runner/.ssh/private_key.pem
+    
+
+      - name: SSH connect
         run: |
-          echo $PRIVATE_KEY
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME}
-          
-            #Now we have got the access of EC2 and we will start the deploy .
-            cd /deploy/${{ env.APP_NAME }} &&
-            git checkout dev &&
-            git fetch --all &&
-            git reset --hard origin/master &&
-            git pull origin dev &&
-            docker-compose -f docker-compose.yml up -d --build 
+          ssh -o StrictHostKeyChecking=no -i /home/runner/.ssh/private_key.pem ${USER_NAME}@${HOSTNAME}
+          #Now we have got the access of EC2 and we will start the deploy .
+          cd /${{ env.APP_NAME }} &&
+          git checkout dev &&
+          git fetch --all &&
+          git reset --hard origin/master &&
+          git pull origin dev &&
+          docker-compose -f docker-compose.yml up -d --build 
