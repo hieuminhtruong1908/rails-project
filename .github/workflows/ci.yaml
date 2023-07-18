@@ -19,7 +19,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Setup environment
-        uses: ./.github/actions/action
+        uses: ./.github/actions/setup/action
         with:
           ruby-version: ${{ env.RUBY }}
       - name: Run linters
@@ -44,7 +44,7 @@ jobs:
    steps:
      - uses: actions/checkout@v2
      - name: Setup environment
-       uses: ./.github/actions/action
+       uses: ./.github/actions/setup/action
        with:
          ruby-version: ${{ env.RUBY }}
      - name: Get yarn cache
