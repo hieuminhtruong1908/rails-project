@@ -2,3 +2,15 @@ Style/Documentation:
   Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+Style/StringLiterals:
+  Enabled: false
+Style/RedundantFetchBlock:
+  Enabled: false
+Style/GlobalStdStream:
+  Enabled: false
+Style/PercentLiteralDelimiters:
+  Enabled: false
