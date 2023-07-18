@@ -27,7 +27,7 @@ jobs:
           bundle exec rubocop app config --parallel
           bundle exec reek app config
           bundle exec rails_best_practices .
-          bundle exec brakeman . -z -q --force
+          bundle exec brakeman app -z -q --force
   test:
    name: Spect Test
    runs-on: ubuntu-latest
