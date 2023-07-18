@@ -63,7 +63,7 @@ jobs:
      - name: Run tests
        env:
          RAILS_ENV: test
-         DATABASE_HOST: mysql
+         DATABASE_HOST: localhost
          DATABASE_NAME: rails_app
          DATABASE_PASSWORD: password
          DATABASE_USERNAME: root
