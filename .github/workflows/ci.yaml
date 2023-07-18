@@ -61,6 +61,7 @@ jobs:
      - name: Run tests
        env:
          RAILS_ENV: test
+         DATABASE_HOST: mysql
        run: |
          bin/rails db:create db:migrate
          bundle exec rspec
