@@ -3,7 +3,7 @@ name: deploy to ec2
 on:
   pull_request:
     branches:
-      - 'main'
+      - 'dev'
 
 env:
   APP_NAME: 'rails-project'
