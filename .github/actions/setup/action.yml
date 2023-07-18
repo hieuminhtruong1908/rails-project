@@ -1,0 +1,25 @@
+name: Setup environment ruby
+
+inputs:
+ ruby-version:
+   description: 'Ruby version to use'
+   required: false
+   default: '2.6.3'
+ node-version:
+   description: 'Node version to use'
+   required: false
+   default: '16.x'
+
+runs:
+ using: composite
+ steps:
+   - name: Setup Ruby and install gems
+     uses: ruby/setup-ruby@v1
+     with:
+       ruby-version: ${{ inputs.ruby-version }}
+       bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+   - name: Setup Node
+     uses: actions/setup-node@v1
+     with:
+       node-version: ${{ inputs.node-version }}
