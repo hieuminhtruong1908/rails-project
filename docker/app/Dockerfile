@@ -4,11 +4,7 @@ FROM ruby:${RUBY_VERSION}-slim-buster
 
 WORKDIR /app
 
-COPY Gemfile* ./
-
-COPY package.json ./
-
-COPY yarn.lock ./
+COPY . .
 
 RUN apt-get update && \
     apt-get install build-essential -y --no-install-recommends \
