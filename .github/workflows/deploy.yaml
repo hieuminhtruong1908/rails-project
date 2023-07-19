@@ -42,12 +42,14 @@ jobs:
 
       - name: change permission to private key
         run: chmod 400 /home/runner/.ssh/private_key.pem
-    
+
+      - name: ssh-keygen -R
+        run: ssh-keygen -R ${HOSTNAME}
 
       - name: SSH connect
         run: |
           echo ${USER_NAME}@${HOSTNAME}
-          ssh -o StrictHostKeyChecking=no -i /home/runner/.ssh/private_key.pem ${USER_NAME}@${HOSTNAME}
+          ssh -i /home/runner/.ssh/private_key.pem ${USER_NAME}@${HOSTNAME}
           #Now we have got the access of EC2 and we will start the deploy .
           cd /${{ env.APP_NAME }} &&
           git checkout dev &&
