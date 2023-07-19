@@ -36,7 +36,7 @@ jobs:
           script: |
             whoami
             ls -la
-            cd /${{ env.APP_NAME }} &&
+            cd /home/${{ secrets.AWS_USER }}/${{ env.APP_NAME }} &&
             git checkout development &&
             git fetch --all &&
             git reset --hard origin/master &&
