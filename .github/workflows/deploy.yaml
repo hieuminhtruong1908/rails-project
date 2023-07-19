@@ -46,7 +46,7 @@ jobs:
 
       - name: SSH connect
         run: |
-          ssh -o StrictHostKeyChecking=no -i /home/runner/.ssh/private_key.pem ${USER_NAME}@${HOSTNAME}
+          ssh -i /home/runner/.ssh/private_key.pem ${USER_NAME}@${HOSTNAME}
           #Now we have got the access of EC2 and we will start the deploy .
           cd /${{ env.APP_NAME }} &&
           git checkout dev &&
