@@ -26,32 +26,18 @@ jobs:
     steps:
       - name: Deploy in EC2
         uses: actions/checkout@v2 
-      
-        env:
-            PRIVATE_KEY: ${{ secrets.AWS_SECRET_KEY  }}
-            HOSTNAME : ${{ secrets.AWS_HOST  }}
-            USER_NAME : ${{ secrets.AWS_USER  }}
-      - name: create ssh folder
-        run: mkdir /home/runner/.ssh/
-
-      - name: create private key
-        run: touch /home/runner/.ssh/private_key.pem
-
-      - name: copy private key
-        run: 'echo "$PRIVATE_KEY" > /home/runner/.ssh/private_key.pem'
-
-      - name: change permission to private key
-        run: chmod 400 /home/runner/.ssh/private_key.pem
-    
-
-      - name: ssh
-        run: |
-          echo $PRIVATE_KEY
-          ssh -o StrictHostKeyChecking=no -i /home/runner/.ssh/private_key.pem ${USER_NAME}@${HOSTNAME}
-            #Now we have got the access of EC2 and we will start the deploy .
-            cd /deploy/${{ env.APP_NAME }} &&
-            git checkout dev &&
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          password: ${{ secrets.AWS_PASSWORD }}
+          port: 22
+          script: |
+            whoami
+            cd /${{ env.APP_NAME } &&
+            git checkout development &&
             git fetch --all &&
             git reset --hard origin/master &&
-            git pull origin dev &&
+            git pull origin development &&
             docker-compose -f docker-compose.yml up -d --build
