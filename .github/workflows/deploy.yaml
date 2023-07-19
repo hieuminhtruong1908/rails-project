@@ -40,5 +40,6 @@ jobs:
             git checkout development &&
             git fetch --all &&
             git reset --hard origin/master &&
+            git config pull.rebase false && 
             git pull origin development &&
             docker-compose -f docker-compose.yml up -d --build
