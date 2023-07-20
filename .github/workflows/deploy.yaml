@@ -1,0 +1,45 @@
+name: deploy to ec2
+
+on:
+  pull_request:
+    branches:
+      - 'development'
+
+env:
+  APP_NAME: 'rails-project'
+
+jobs:
+#First we will see the application build or not , then we will deploy in EC2
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Build the docker_compose
+      run: docker-compose up -d --build
+
+  Deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy in EC2
+        uses: actions/checkout@v2 
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.AWS_HOST }}
+          username: ${{ secrets.AWS_USER }}
+          password: ${{ secrets.AWS_PASSWORD }}
+          port: 22
+          script: |
+            whoami
+            ls -la
+            cd /home/${{ secrets.AWS_USER }}/${{ env.APP_NAME }} &&
+            git checkout development &&
+            git fetch --all &&
+            git reset --hard origin/master &&
+            git config pull.rebase false && 
+            git pull origin development &&
+            docker-compose -f docker-compose.yml up -d --build

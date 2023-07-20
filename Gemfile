@@ -39,6 +39,7 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
+  gem 'rspec-rails', '~> 4.0.0'
 end
 
 group :development do
@@ -50,7 +51,10 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'rubocop-rails', require: false
   gem 'mry'
-
+  gem 'rubocop', require: false
+  gem 'reek', '~> 6.1', '>= 6.1.4'
+  gem 'brakeman'
+  gem "rails_best_practices"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -58,3 +62,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'mysql2'
+gem 'devise'
