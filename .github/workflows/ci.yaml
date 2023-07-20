@@ -4,8 +4,6 @@ on:
   pull_request:
     branches:
       - 'development'
-    types:
-     - opened
 env:
 # Your ruby version
   RUBY: '2.6.3'
