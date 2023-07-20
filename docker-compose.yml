@@ -20,6 +20,11 @@ services:
       - db
     env_file:
       - .env
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_USER=${DATABASE_USERNAME}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_PORT=3307
     ports:
       - 3000:3000
     build:
