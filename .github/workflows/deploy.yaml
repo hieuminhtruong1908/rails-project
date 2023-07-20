@@ -2,6 +2,8 @@ name: deploy to ec2
 
 on:
   pull_request:
+    types: 
+      - closed
     branches:
       - 'development'
 
@@ -11,6 +13,7 @@ env:
 jobs:
 #First we will see the application build or not , then we will deploy in EC2
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     
     steps:
