@@ -14,3 +14,5 @@ Style/GlobalStdStream:
   Enabled: false
 Style/PercentLiteralDelimiters:
   Enabled: false
+Style/EmptyMethod:
+  Enabled: false
