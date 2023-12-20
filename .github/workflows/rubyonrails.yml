@@ -17,4 +17,4 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Display branch name
-        run: echo "${{ GITHUB_REF##*/ }}"
+        run: echo "The value of GITHUB_REF is ${{ github.ref }}"
